@@ -31,10 +31,10 @@ The Grid Reliability dashboard pulls real data from MEMA (Massachusetts Emergenc
 
 ### Brand Colors (in CSS variables)
 ```css
---daylight-orange: #FF6B35;
---daylight-cream: #FFF8F0;
---daylight-cream-dark: #F5EDE3;
---daylight-black: #1A1A1A;
+--daylight-orange: #F66F00;
+--daylight-cream: #FFF7E9;
+--daylight-cream-dark: #F3EAD9;
+--daylight-black: #232220;
 ```
 
 ### Adding Partners to Tiers Directory
