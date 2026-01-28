@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG to PNG Converter | Daylight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --daylight-orange: #FF6B35;
+            --daylight-orange-dark: #E55A2B;
+            --daylight-cream: #FFF8F0;
+            --daylight-cream-dark: #F5EDE3;
+            --daylight-black: #1A1A1A;
+            --daylight-gray: #6B6B6B;
+            --daylight-light-gray: #E8E8E8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--daylight-cream);
+            min-height: 100vh;
+            color: var(--daylight-black);
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--daylight-gray);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 32px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--daylight-orange);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+        }
+
+        .logo span {
+            color: var(--daylight-orange);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--daylight-gray);
+        }
+
+        .card {
+            background: var(--daylight-cream-dark);
+            border-radius: 16px;
+            padding: 32px;
+            border: 2px solid var(--daylight-light-gray);
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+        }
+
+        input[type="number"], input[type="text"] {
+            padding: 12px 16px;
+            font-size: 15px;
+            border: 2px solid var(--daylight-light-gray);
+            border-radius: 8px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: var(--daylight-cream);
+            width: 100px;
+        }
+
+        input[type="text"] {
+            width: 120px;
+            font-family: monospace;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--daylight-orange);
+            background: white;
+        }
+
+        input[type="file"] {
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 2px solid var(--daylight-light-gray);
+            border-radius: 8px;
+            background: var(--daylight-cream);
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        input[type="file"]:hover {
+            border-color: var(--daylight-orange);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--daylight-orange);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--daylight-orange-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--daylight-cream);
+            color: var(--daylight-orange);
+            border: 2px solid var(--daylight-orange);
+        }
+
+        .btn-secondary:hover {
+            background: var(--daylight-orange);
+            color: white;
+        }
+
+        .svg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .svg-item {
+            background: var(--daylight-cream);
+            border: 2px solid var(--daylight-light-gray);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .svg-item:hover {
+            border-color: var(--daylight-orange);
+        }
+
+        .svg-preview {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .svg-preview svg {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .svg-name {
+            font-size: 12px;
+            color: var(--daylight-gray);
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--daylight-gray);
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            color: var(--daylight-light-gray);
+            margin-bottom: 16px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 48px 24px 24px;
+            color: var(--daylight-gray);
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: var(--daylight-orange);
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .input-group {
+                width: 100%;
+            }
+            
+            input[type="number"], input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back to Tools
+        </a>
+
+        <div class="header">
+            <div class="logo">daylight<span>.</span></div>
+            <h1>SVG to PNG Converter</h1>
+            <p class="subtitle">Batch convert SVG files to PNG with custom settings</p>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">Upload Files</h3>
+            <div class="controls">
+                <div class="input-group">
+                    <label for="fileInput">Select SVG Files</label>
+                    <input type="file" id="fileInput" accept=".svg,image/svg+xml" multiple onchange="loadSVGs(event)">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">Conversion Settings</h3>
+            <div class="controls">
+                <div class="input-group">
+                    <label for="strokeColor">Stroke Color</label>
+                    <input type="text" id="strokeColor" value="#FF6B35" placeholder="#FF6B35" maxlength="7">
+                </div>
+                <div class="input-group">
+                    <label for="width">Width (px)</label>
+                    <input type="number" id="width" value="50" min="10" max="8000">
+                </div>
+                <div class="input-group">
+                    <label for="height">Height (px)</label>
+                    <input type="number" id="height" value="50" min="10" max="8000">
+                </div>
+                <button class="btn btn-secondary" onclick="applyColorToAll()">Apply Color</button>
+                <button class="btn btn-primary" onclick="convertAllToPNG()">Download All as PNG</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">Preview</h3>
+            <div id="svgGrid" class="svg-grid">
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                    </svg>
+                    <p>No SVG files loaded yet. Upload some files to get started!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Built for <a href="https://godaylight.com" target="_blank">Daylight</a> partner operations</p>
+    </div>
+
+    <script>
+        let svgFiles = [];
+
+        function loadSVGs(event) {
+            const files = Array.from(event.target.files);
+            const grid = document.getElementById('svgGrid');
+            grid.innerHTML = '';
+            svgFiles = [];
+
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const svgContent = e.target.result;
+                    svgFiles.push({
+                        name: file.name,
+                        content: svgContent,
+                        index: index
+                    });
+
+                    const item = document.createElement('div');
+                    item.className = 'svg-item';
+                    item.innerHTML = `
+                        <div class="svg-preview">
+                            ${svgContent}
+                        </div>
+                        <div class="svg-name">${file.name}</div>
+                    `;
+                    
+                    const svg = item.querySelector('svg');
+                    if (svg) {
+                        svg.id = 'svg-' + index;
+                    }
+                    
+                    grid.appendChild(item);
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        function applyColorToAll() {
+            const colorInput = document.getElementById('strokeColor').value.trim();
+            const hexPattern = /^#[0-9A-Fa-f]{6}$/;
+            
+            if (!hexPattern.test(colorInput)) {
+                alert('Please enter a valid hex color (e.g., #FF6B35)');
+                return;
+            }
+
+            svgFiles.forEach((file, index) => {
+                const svg = document.getElementById('svg-' + index);
+                if (svg) {
+                    const elements = svg.querySelectorAll('[stroke]');
+                    elements.forEach(el => {
+                        el.setAttribute('stroke', colorInput);
+                    });
+                }
+            });
+        }
+
+        function convertAllToPNG() {
+            if (svgFiles.length === 0) {
+                alert('Please upload SVG files first!');
+                return;
+            }
+
+            const width = parseInt(document.getElementById('width').value);
+            const height = parseInt(document.getElementById('height').value);
+
+            svgFiles.forEach((file, index) => {
+                setTimeout(() => {
+                    const svg = document.getElementById('svg-' + index);
+                    if (!svg) return;
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+
+                    const svgString = new XMLSerializer().serializeToString(svg);
+                    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+
+                    const img = new Image();
+                    img.onload = function() {
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        canvas.toBlob(function(pngBlob) {
+                            const link = document.createElement('a');
+                            const fileName = file.name.replace('.svg', '') + '.png';
+                            link.download = fileName;
+                            link.href = URL.createObjectURL(pngBlob);
+                            link.click();
+
+                            URL.revokeObjectURL(url);
+                        }, 'image/png');
+                    };
+
+                    img.src = url;
+                }, index * 300);
+            });
+        }
+    </script>
+</body>
+</html>

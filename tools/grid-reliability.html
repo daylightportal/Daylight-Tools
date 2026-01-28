@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MA Grid Reliability | Daylight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --daylight-orange: #FF6B35;
+            --daylight-orange-dark: #E55A2B;
+            --daylight-cream: #FFF8F0;
+            --daylight-cream-dark: #F5EDE3;
+            --daylight-black: #1A1A1A;
+            --daylight-gray: #6B6B6B;
+            --daylight-light-gray: #E8E8E8;
+            --success-green: #10B981;
+            --warning-amber: #F59E0B;
+            --danger-red: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--daylight-cream);
+            min-height: 100vh;
+            color: var(--daylight-black);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--daylight-gray);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 32px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--daylight-orange);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+        }
+
+        .logo span {
+            color: var(--daylight-orange);
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--daylight-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .alert-banner {
+            background: linear-gradient(135deg, var(--daylight-orange) 0%, var(--daylight-orange-dark) 100%);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .alert-banner svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .alert-content {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .alert-text {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #10B981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-card {
+            background: var(--daylight-cream-dark);
+            border: 2px solid var(--daylight-light-gray);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--daylight-orange);
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--daylight-cream);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .stat-icon svg {
+            width: 24px;
+            height: 24px;
+            color: var(--daylight-orange);
+        }
+
+        .stat-icon.green svg { color: var(--success-green); }
+        .stat-icon.amber svg { color: var(--warning-amber); }
+        .stat-icon.red svg { color: var(--danger-red); }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--daylight-gray);
+            line-height: 1.4;
+        }
+
+        .card {
+            background: var(--daylight-cream-dark);
+            border: 2px solid var(--daylight-light-gray);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--daylight-black);
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            color: var(--daylight-gray);
+            margin-top: 4px;
+        }
+
+        .map-container {
+            background: var(--daylight-cream);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .outage-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 20px;
+            background: var(--daylight-cream);
+            border-bottom: 2px solid var(--daylight-light-gray);
+        }
+
+        @media (max-width: 600px) {
+            .outage-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--daylight-black);
+        }
+
+        .summary-value.warning {
+            color: var(--warning-amber);
+        }
+
+        .summary-value.danger {
+            color: var(--danger-red);
+        }
+
+        .summary-label {
+            font-size: 11px;
+            color: var(--daylight-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .outage-table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .outage-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .outage-table th {
+            background: var(--daylight-black);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .outage-table th:hover {
+            background: #333;
+        }
+
+        .outage-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--daylight-light-gray);
+        }
+
+        .outage-table tbody tr:hover {
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .outage-table tbody tr.has-outage {
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .outage-table tbody tr.has-outage:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .outage-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .outage-badge.ok {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-green);
+        }
+
+        .outage-badge.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-amber);
+        }
+
+        .outage-badge.danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-red);
+        }
+
+        .search-box {
+            padding: 16px 20px;
+            background: var(--daylight-cream-dark);
+            border-bottom: 2px solid var(--daylight-light-gray);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 2px solid var(--daylight-light-gray);
+            border-radius: 8px;
+            font-family: inherit;
+            background: var(--daylight-cream);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--daylight-orange);
+            background: white;
+        }
+
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            color: var(--daylight-gray);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--daylight-light-gray);
+            border-top-color: var(--daylight-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-state {
+            padding: 40px;
+            text-align: center;
+            color: var(--daylight-gray);
+        }
+
+        .last-updated {
+            padding: 12px 20px;
+            background: var(--daylight-cream-dark);
+            font-size: 12px;
+            color: var(--daylight-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .refresh-btn {
+            background: none;
+            border: none;
+            color: var(--daylight-orange);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .refresh-btn:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--daylight-orange);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--daylight-orange-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--daylight-cream);
+            color: var(--daylight-orange);
+            border: 2px solid var(--daylight-orange);
+        }
+
+        .btn-secondary:hover {
+            background: var(--daylight-orange);
+            color: white;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 700px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-card {
+            background: var(--daylight-cream);
+            border-radius: 12px;
+            padding: 24px;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .comparison-card.grid {
+            border-color: var(--danger-red);
+        }
+
+        .comparison-card.daylight {
+            border-color: var(--success-green);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.1) 100%);
+        }
+
+        .comparison-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .comparison-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .comparison-icon.grid {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-red);
+        }
+
+        .comparison-icon.daylight {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-green);
+        }
+
+        .comparison-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .comparison-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--daylight-black);
+        }
+
+        .comparison-list {
+            list-style: none;
+        }
+
+        .comparison-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 14px;
+            color: var(--daylight-gray);
+            border-bottom: 1px solid var(--daylight-light-gray);
+        }
+
+        .comparison-list li:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-list li svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .comparison-list.grid li svg {
+            color: var(--danger-red);
+        }
+
+        .comparison-list.daylight li svg {
+            color: var(--success-green);
+        }
+
+        .insight-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 800px) {
+            .insight-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .insight-card {
+            background: var(--daylight-cream);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .insight-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+        }
+
+        .insight-card p {
+            font-size: 13px;
+            color: var(--daylight-gray);
+            line-height: 1.5;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--daylight-black) 0%, #2d2d2d 100%);
+            border-radius: 16px;
+            padding: 48px;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .cta-section p {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-bottom: 24px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-buttons .btn-primary {
+            background: var(--daylight-orange);
+        }
+
+        .cta-buttons .btn-secondary {
+            background: transparent;
+            border-color: white;
+            color: white;
+        }
+
+        .cta-buttons .btn-secondary:hover {
+            background: white;
+            color: var(--daylight-black);
+        }
+
+        .source-note {
+            font-size: 11px;
+            color: var(--daylight-gray);
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .source-note a {
+            color: var(--daylight-orange);
+            text-decoration: none;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 48px 24px 24px;
+            color: var(--daylight-gray);
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: var(--daylight-orange);
+            text-decoration: none;
+        }
+
+        .external-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .external-link svg {
+            width: 14px;
+            height: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back to Tools
+        </a>
+
+        <div class="header">
+            <div class="logo">daylight<span>.</span></div>
+            <h1>Massachusetts Grid Reliability</h1>
+            <p class="subtitle">Real-time outage data and insights to help you understand why battery backup matters</p>
+        </div>
+
+        <div class="alert-banner">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+            </svg>
+            <div class="alert-content">
+                <div class="alert-title">Power Grid Status</div>
+                <div class="alert-text">Massachusetts currently has active outages. Check your area below.</div>
+            </div>
+            <div class="live-indicator">
+                <span class="live-dot"></span>
+                Live Data
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon amber">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                </div>
+                <div class="stat-value">11 hrs</div>
+                <div class="stat-label">Avg. US outage time in 2024 (2x the 10-year average)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="stat-value">&lt;2 hrs</div>
+                <div class="stat-label">Massachusetts avg. outage time (better than most states)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon red">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.306a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.281m5.94 2.28l-2.28 5.941" />
+                    </svg>
+                </div>
+                <div class="stat-value">80%</div>
+                <div class="stat-label">Of 2024 outages caused by extreme weather events</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
+                    </svg>
+                </div>
+                <div class="stat-value">32 kWh</div>
+                <div class="stat-label">Daylight battery backup (10+ hours of protection)</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Live Massachusetts Outage Map</h2>
+                    <p class="card-subtitle">Data from Massachusetts Emergency Management Agency (MEMA)</p>
+                </div>
+                <a href="https://mema.mapsonline.net/public.html" target="_blank" class="btn btn-secondary external-link">
+                    Open Full Map
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    </svg>
+                </a>
+            </div>
+            <div class="map-container">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="townSearch" placeholder="Search for your town..." oninput="filterTable()">
+                </div>
+                <div class="outage-summary" id="outageSummary">
+                    <div class="summary-item">
+                        <div class="summary-value" id="totalOutages">--</div>
+                        <div class="summary-label">Customers Out</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="townsAffected">--</div>
+                        <div class="summary-label">Towns Affected</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="totalCustomers">--</div>
+                        <div class="summary-label">Total Customers</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="statePercent">--</div>
+                        <div class="summary-label">State % Out</div>
+                    </div>
+                </div>
+                <div class="outage-table-container" id="tableContainer">
+                    <div class="loading-state" id="loadingState">
+                        <div class="spinner"></div>
+                        <p>Loading live outage data from MEMA...</p>
+                    </div>
+                </div>
+                <div class="last-updated" id="lastUpdated">
+                    <span>Data source: Massachusetts Emergency Management Agency (MEMA)</span>
+                    <button class="refresh-btn" onclick="fetchOutageData()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+            <p class="source-note">Data sources: <a href="https://www.mass.gov/info-details/power-outages" target="_blank">Mass.gov</a>, <a href="https://mema.mapsonline.net/public.html" target="_blank">MEMA</a>, <a href="https://poweroutage.us/area/state/massachusetts" target="_blank">PowerOutage.us</a></p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Grid Power vs. Daylight</h2>
+                    <p class="card-subtitle">What happens when the power goes out?</p>
+                </div>
+            </div>
+            <div class="comparison-grid">
+                <div class="comparison-card grid">
+                    <div class="comparison-header">
+                        <div class="comparison-icon grid">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                            </svg>
+                        </div>
+                        <div class="comparison-title">Traditional Grid Power</div>
+                    </div>
+                    <ul class="comparison-list grid">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            No power during outages — wait for utility repair
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Vulnerable to rate increases (MA rates up 64% since 2020)
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Food spoilage, medical equipment risks
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            No heating/cooling during extreme weather
+                        </li>
+                    </ul>
+                </div>
+                <div class="comparison-card daylight">
+                    <div class="comparison-header">
+                        <div class="comparison-icon daylight">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                            </svg>
+                        </div>
+                        <div class="comparison-title">Daylight Solar + Battery</div>
+                    </div>
+                    <ul class="comparison-list daylight">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+                            32 kWh battery backup (10+ hours of power)
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+                            Locked-in rates ~20% below utility pricing
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+                            Keep refrigerator, lights, Wi-Fi running
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+                            $0 upfront, 25-year warranty included
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2 class="card-title">Why Outages Are Getting Worse</h2>
+                    <p class="card-subtitle">Key insights from the 2024 EIA report</p>
+                </div>
+            </div>
+            <div class="insight-cards">
+                <div class="insight-card">
+                    <h4>🌀 Extreme Weather</h4>
+                    <p>Hurricanes caused 80% of 2024 outage hours. Climate change is making storms more frequent and intense, putting more stress on aging infrastructure.</p>
+                </div>
+                <div class="insight-card">
+                    <h4>⚡ Aging Infrastructure</h4>
+                    <p>Much of the US power grid was built 40-50 years ago. Utilities struggle to keep up with maintenance while demand continues to grow.</p>
+                </div>
+                <div class="insight-card">
+                    <h4>📈 Rising Demand</h4>
+                    <p>Data centers, EVs, and electrification are increasing grid load. Peak demand events strain the system and increase outage risk.</p>
+                </div>
+            </div>
+            <p class="source-note">Source: <a href="https://www.eia.gov/todayinenergy/detail.php?id=66744" target="_blank">U.S. Energy Information Administration (EIA)</a>, December 2025</p>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to Take Control of Your Power?</h2>
+            <p>See if your home qualifies for Daylight's solar + battery system with $0 upfront cost.</p>
+            <div class="cta-buttons">
+                <a href="https://godaylight.com" target="_blank" class="btn btn-primary">Check If You Qualify</a>
+                <a href="https://godaylight.com" target="_blank" class="btn btn-secondary">Learn More About Daylight</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Built for <a href="https://godaylight.com" target="_blank">Daylight</a> partner operations</p>
+    </div>
+
+    <script>
+        let outageData = [];
+        let sortColumn = 'withoutPower';
+        let sortDirection = 'desc';
+
+        // Fetch data from local CSV (updated by GitHub Action every 15 min)
+        async function fetchOutageData() {
+            const loadingState = document.getElementById('loadingState');
+            const tableContainer = document.getElementById('tableContainer');
+            
+            try {
+                // Fetch from local data file (updated by GitHub Action)
+                const response = await fetch('../data/outages.csv?' + Date.now());
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                
+                const csvText = await response.text();
+                outageData = parseCSV(csvText);
+                
+                // Fetch last updated timestamp
+                const timestampResponse = await fetch('../data/last_updated.txt?' + Date.now());
+                const timestamp = await timestampResponse.text();
+                
+                updateSummary();
+                renderTable();
+                updateLastUpdated(timestamp);
+                updateAlertBanner();
+                
+            } catch (error) {
+                console.error('Error fetching outage data:', error);
+                tableContainer.innerHTML = `
+                    <div class="error-state">
+                        <p>Unable to load data. <a href="https://mema.mapsonline.net/public.html" target="_blank" style="color: var(--daylight-orange);">View outages on MEMA's website</a></p>
+                        <button class="btn btn-secondary" onclick="fetchOutageData()" style="margin-top: 16px;">Try Again</button>
+                    </div>
+                `;
+            }
+        }
+
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const headers = lines[0].split(',');
+            
+            return lines.slice(1).map(line => {
+                // Handle quoted fields with commas
+                const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+                const cleanValues = values.map(v => v.replace(/^"|"$/g, '').trim());
+                
+                return {
+                    town: cleanValues[0] || '',
+                    county: cleanValues[1] || '',
+                    region: cleanValues[2] || '',
+                    utility: cleanValues[3] || '',
+                    totalCustomers: parseInt(cleanValues[4]) || 0,
+                    withoutPower: parseInt(cleanValues[5]) || 0,
+                    percentOut: parseFloat(cleanValues[6]) || 0,
+                    notes: cleanValues[7] || '',
+                    lastUpdated: cleanValues[8] || ''
+                };
+            }).filter(row => row.town && row.totalCustomers > 0);
+        }
+
+        function updateSummary() {
+            const totalOutages = outageData.reduce((sum, row) => sum + row.withoutPower, 0);
+            const townsAffected = outageData.filter(row => row.withoutPower > 0).length;
+            const totalCustomers = outageData.reduce((sum, row) => sum + row.totalCustomers, 0);
+            const statePercent = totalCustomers > 0 ? ((totalOutages / totalCustomers) * 100).toFixed(3) : 0;
+
+            document.getElementById('totalOutages').textContent = totalOutages.toLocaleString();
+            document.getElementById('totalOutages').className = 'summary-value' + (totalOutages > 10000 ? ' danger' : totalOutages > 1000 ? ' warning' : '');
+            
+            document.getElementById('townsAffected').textContent = townsAffected;
+            document.getElementById('townsAffected').className = 'summary-value' + (townsAffected > 50 ? ' danger' : townsAffected > 20 ? ' warning' : '');
+            
+            document.getElementById('totalCustomers').textContent = (totalCustomers / 1000000).toFixed(2) + 'M';
+            document.getElementById('statePercent').textContent = statePercent + '%';
+        }
+
+        function updateAlertBanner() {
+            const totalOutages = outageData.reduce((sum, row) => sum + row.withoutPower, 0);
+            const alertText = document.querySelector('.alert-text');
+            const alertTitle = document.querySelector('.alert-title');
+            
+            if (totalOutages > 10000) {
+                alertTitle.textContent = '⚠️ Major Outage Event';
+                alertText.textContent = `${totalOutages.toLocaleString()} customers currently without power in Massachusetts.`;
+            } else if (totalOutages > 1000) {
+                alertTitle.textContent = 'Active Outages';
+                alertText.textContent = `${totalOutages.toLocaleString()} customers currently without power. Check your area below.`;
+            } else if (totalOutages > 0) {
+                alertTitle.textContent = 'Minor Outages';
+                alertText.textContent = `${totalOutages.toLocaleString()} customers affected. Grid is mostly stable.`;
+            } else {
+                alertTitle.textContent = 'Grid Status: Normal';
+                alertText.textContent = 'No significant outages reported in Massachusetts.';
+            }
+        }
+
+        function renderTable() {
+            const tableContainer = document.getElementById('tableContainer');
+            const searchTerm = document.getElementById('townSearch').value.toLowerCase();
+            
+            let filteredData = outageData.filter(row => 
+                row.town.toLowerCase().includes(searchTerm) ||
+                row.county.toLowerCase().includes(searchTerm) ||
+                row.utility.toLowerCase().includes(searchTerm)
+            );
+
+            // Sort data
+            filteredData.sort((a, b) => {
+                let aVal = a[sortColumn];
+                let bVal = b[sortColumn];
+                
+                if (typeof aVal === 'string') {
+                    aVal = aVal.toLowerCase();
+                    bVal = bVal.toLowerCase();
+                }
+                
+                if (sortDirection === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+
+            const tableHTML = `
+                <table class="outage-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('town')">Town ${sortColumn === 'town' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}</th>
+                            <th onclick="sortTable('county')">County ${sortColumn === 'county' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}</th>
+                            <th onclick="sortTable('utility')">Utility ${sortColumn === 'utility' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}</th>
+                            <th onclick="sortTable('withoutPower')">Out ${sortColumn === 'withoutPower' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}</th>
+                            <th onclick="sortTable('totalCustomers')">Total ${sortColumn === 'totalCustomers' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}</th>
+                            <th onclick="sortTable('percentOut')">Status ${sortColumn === 'percentOut' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filteredData.map(row => `
+                            <tr class="${row.withoutPower > 0 ? 'has-outage' : ''}">
+                                <td><strong>${row.town}</strong></td>
+                                <td>${row.county}</td>
+                                <td>${row.utility}</td>
+                                <td>${row.withoutPower.toLocaleString()}</td>
+                                <td>${row.totalCustomers.toLocaleString()}</td>
+                                <td>
+                                    <span class="outage-badge ${row.percentOut >= 1 ? 'danger' : row.percentOut > 0 ? 'warning' : 'ok'}">
+                                        ${row.percentOut >= 1 ? row.percentOut.toFixed(1) + '%' : row.withoutPower > 0 ? '<1%' : 'OK'}
+                                    </span>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            tableContainer.innerHTML = tableHTML;
+        }
+
+        function sortTable(column) {
+            if (sortColumn === column) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = column;
+                sortDirection = column === 'town' || column === 'county' || column === 'utility' ? 'asc' : 'desc';
+            }
+            renderTable();
+        }
+
+        function filterTable() {
+            renderTable();
+        }
+
+        function updateLastUpdated(timestamp) {
+            const match = timestamp.match(/Fetched at (.+)/);
+            if (match) {
+                const date = new Date(match[1]);
+                const timeStr = date.toLocaleString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric',
+                    hour: 'numeric', 
+                    minute: '2-digit',
+                    timeZoneName: 'short'
+                });
+                document.querySelector('.last-updated span').textContent = `Data updated: ${timeStr} • Auto-refreshes every 15 min`;
+            }
+        }
+
+        // Fetch data on page load
+        fetchOutageData();
+        
+        // Auto-refresh every 5 minutes (in case user keeps page open)
+        setInterval(fetchOutageData, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
