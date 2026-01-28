@@ -2,11 +2,7 @@
 
 Internal tools for Daylight solar partner operations.
 
-## 🚀 Live Site
-
-Once deployed, your site will be at: `https://YOUR-USERNAME.github.io/daylight-tools/`
-
-## 📁 Tools Included
+## Tools Included
 
 | Tool | Description |
 |------|-------------|
@@ -17,7 +13,7 @@ Once deployed, your site will be at: `https://YOUR-USERNAME.github.io/daylight-t
 | **SVG to PNG Converter** | Batch convert SVG files with custom colors/dimensions |
 | **MA Grid Reliability** | Live outage data from MEMA + solar sales content |
 
-## ⚡ Live Outage Data
+## Live Outage Data
 
 The Grid Reliability dashboard pulls real data from MEMA (Massachusetts Emergency Management Agency). A GitHub Action runs every 15 minutes to fetch fresh data.
 
@@ -27,67 +23,13 @@ The Grid Reliability dashboard pulls real data from MEMA (Massachusetts Emergenc
 3. Saves to `data/outages.csv`
 4. Page reads from local file (no CORS issues!)
 
-### First-time setup for live data:
-
-After you push the repo to GitHub:
-
-1. Go to your repo on GitHub
-2. Click **Settings** → **Actions** → **General**
-3. Under "Workflow permissions", select **Read and write permissions**
-4. Click **Save**
-5. Go to **Actions** tab
-6. Click on "Fetch MEMA Outage Data" workflow
-7. Click **Run workflow** to trigger the first data fetch
-
-The data will auto-update every 15 minutes after that!
-
-## 🛠️ Deployment Instructions
-
-### Step 1: Create GitHub Repository
-
-1. Go to [github.com](https://github.com) and sign in
-2. Click the **+** icon → **New repository**
-3. Name it `daylight-tools`
-4. Select **Public**
-5. Click **Create repository**
-
-### Step 2: Upload Files
-
-1. On your new repo page, click **"uploading an existing file"**
-2. Drag and drop ALL contents of this folder (including `.github` folder)
-3. Click **Commit changes**
-
-### Step 3: Enable GitHub Pages
-
-1. Go to **Settings** → **Pages**
-2. Under "Build and deployment":
-   - Source: **Deploy from a branch**
-   - Branch: **main** / **/ (root)**
-3. Click **Save**
-4. Wait 1-2 minutes for deployment
-
-### Step 4: Enable Workflow Permissions
-
-1. Go to **Settings** → **Actions** → **General**
-2. Scroll to "Workflow permissions"
-3. Select **Read and write permissions**
-4. Click **Save**
-
-### Step 5: Trigger First Data Fetch
-
-1. Go to **Actions** tab
-2. Click **Fetch MEMA Outage Data**
-3. Click **Run workflow** → **Run workflow**
-
-Your site is now live with auto-updating outage data! 🎉
-
-## 📊 Data Sources
+## Data Sources
 
 - **Outage data**: [MEMA](https://mema.mapsonline.net/public.html) (updates every 15 min)
 - **Grid statistics**: [U.S. Energy Information Administration](https://www.eia.gov/todayinenergy/detail.php?id=66744)
 - **MA utility info**: [Mass.gov](https://www.mass.gov/info-details/power-outages)
 
-## 🎨 Customization
+## Customization
 
 ### Brand Colors (in CSS variables)
 ```css
@@ -114,7 +56,7 @@ const partners = [
 ];
 ```
 
-## 📝 License
+## License
 
 Internal use only - Daylight Energy
 
