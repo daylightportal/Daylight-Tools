@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Qualifier | Daylight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --daylight-orange: #FF6B35;
+            --daylight-orange-dark: #E55A2B;
+            --daylight-cream: #FFF8F0;
+            --daylight-cream-dark: #F5EDE3;
+            --daylight-black: #1A1A1A;
+            --daylight-gray: #6B6B6B;
+            --daylight-light-gray: #E8E8E8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--daylight-cream);
+            min-height: 100vh;
+            color: var(--daylight-black);
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--daylight-gray);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 32px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--daylight-orange);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+        }
+
+        .logo span {
+            color: var(--daylight-orange);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--daylight-gray);
+        }
+
+        .card {
+            background: var(--daylight-cream-dark);
+            border-radius: 16px;
+            padding: 40px;
+            border: 2px solid var(--daylight-light-gray);
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 2px solid var(--daylight-light-gray);
+            border-radius: 10px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: var(--daylight-cream);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--daylight-orange);
+            background: white;
+        }
+
+        input::placeholder {
+            color: #A0A0A0;
+        }
+
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--daylight-cream);
+            border: 2px solid var(--daylight-light-gray);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .autocomplete-dropdown.active {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 12px 16px;
+            color: var(--daylight-black);
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+
+        .autocomplete-item:hover {
+            background: var(--daylight-cream-dark);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: var(--daylight-orange);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .submit-btn:hover {
+            background: var(--daylight-orange-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--daylight-light-gray);
+            border-radius: 2px;
+            margin-top: 16px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .loading-bar.active {
+            display: block;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: var(--daylight-orange);
+            width: 0%;
+            transition: width 0.8s ease-in-out;
+            border-radius: 2px;
+        }
+
+        .result {
+            margin-top: 24px;
+            padding: 16px 24px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            display: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result.error {
+            background: var(--daylight-cream);
+            color: var(--daylight-gray);
+            border: 2px solid var(--daylight-light-gray);
+        }
+
+        .result.in-network {
+            background: #ECFDF5;
+            color: #059669;
+            border: 2px solid #10B981;
+        }
+
+        .result.out-network {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 2px solid #EF4444;
+        }
+
+        .stats {
+            margin-top: 32px;
+            text-align: center;
+            color: var(--daylight-gray);
+            font-size: 14px;
+        }
+
+        .stats-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--daylight-orange);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 48px 24px 24px;
+            color: var(--daylight-gray);
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: var(--daylight-orange);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back to Tools
+        </a>
+
+        <div class="header">
+            <div class="logo">daylight<span>.</span></div>
+            <h1>Network Qualifier</h1>
+            <p class="subtitle">Check if a Massachusetts town is in the Sunday Energy service network</p>
+        </div>
+
+        <div class="card">
+            <div class="input-group">
+                <label for="townName">Town Name</label>
+                <div class="input-wrapper">
+                    <input type="text" id="townName" placeholder="Enter a Massachusetts town..." autocomplete="off">
+                    <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="checkNetwork()">Check Network Status</button>
+
+            <div class="loading-bar" id="loadingBar">
+                <div class="loading-progress" id="loadingProgress"></div>
+            </div>
+
+            <div class="result" id="networkResult"></div>
+
+            <div class="stats">
+                <span class="stats-value" id="zipCount">0</span>
+                Towns Currently in Network
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Built for <a href="https://godaylight.com" target="_blank">Daylight</a> partner operations</p>
+    </div>
+
+    <script>
+        const zipData = {
+            '02108': 'Boston, MA', '02109': 'Boston, MA', '02110': 'Boston, MA', '02111': 'Boston, MA',
+            '02112': 'Boston, MA', '02113': 'Boston, MA', '02114': 'Boston, MA', '02115': 'Boston, MA',
+            '02116': 'Boston, MA', '02117': 'Boston, MA', '02118': 'Boston, MA', '02119': 'Boston, MA',
+            '02120': 'Boston, MA', '02121': 'Boston, MA', '02122': 'Boston, MA', '02124': 'Boston, MA',
+            '02125': 'Boston, MA', '02126': 'Boston, MA', '02127': 'Boston, MA', '02128': 'Boston, MA',
+            '02129': 'Boston, MA', '02130': 'Boston, MA', '02131': 'Boston, MA', '02132': 'Boston, MA',
+            '02133': 'Boston, MA', '02134': 'Boston, MA', '02135': 'Boston, MA', '02136': 'Boston, MA',
+            '02138': 'Cambridge, MA', '02139': 'Cambridge, MA', '02140': 'Cambridge, MA',
+            '02141': 'Cambridge, MA', '02142': 'Cambridge, MA', '02143': 'Somerville, MA',
+            '02144': 'Somerville, MA', '02145': 'Somerville, MA', '02148': 'Malden, MA',
+            '02149': 'Everett, MA', '02150': 'Chelsea, MA', '02151': 'Revere, MA',
+            '02152': 'Winthrop, MA', '02155': 'Medford, MA', '02156': 'Medford, MA',
+            '02169': 'Quincy, MA', '02170': 'Quincy, MA', '02171': 'Quincy, MA',
+            '02188': 'Weymouth, MA', '02189': 'Weymouth, MA', '02190': 'Weymouth, MA',
+            '02191': 'Weymouth, MA', '02228': 'Boston, MA', '02301': 'Brockton, MA',
+            '02302': 'Brockton, MA', '02303': 'Brockton, MA', '02304': 'Brockton, MA',
+            '02305': 'Brockton, MA', '02322': 'Avon, MA', '02324': 'Bridgewater, MA',
+            '02330': 'Carver, MA', '02332': 'Duxbury, MA', '02333': 'East Bridgewater, MA',
+            '02338': 'Halifax, MA', '02339': 'Hanover, MA', '02341': 'Hanson, MA',
+            '02343': 'Holbrook, MA', '02351': 'Abington, MA', '02356': 'North Easton, MA',
+            '02357': 'North Scituate, MA', '02359': 'Pembroke, MA', '02360': 'Plymouth, MA',
+            '02367': 'Plympton, MA', '02368': 'Randolph, MA', '02370': 'Rockland, MA',
+            '02375': 'South Easton, MA', '02379': 'West Bridgewater, MA', '02382': 'Whitman, MA',
+            '02445': 'Brookline, MA', '02446': 'Brookline, MA', '02447': 'Brookline, MA',
+            '02451': 'Waltham, MA', '02452': 'Waltham, MA', '02453': 'Waltham, MA',
+            '02454': 'Waltham, MA', '02458': 'Newton, MA', '02459': 'Newton, MA',
+            '02460': 'Newton, MA', '02461': 'Newton, MA', '02462': 'Newton, MA',
+            '02464': 'Newton, MA', '02465': 'Newton, MA', '02466': 'Newton, MA',
+            '02467': 'Newton, MA', '02468': 'Newton, MA', '02471': 'Watertown, MA',
+            '02472': 'Watertown, MA', '02474': 'Arlington, MA', '02476': 'Arlington, MA',
+            '02532': 'Buzzards Bay, MA', '02534': 'Cataumet, MA', '02542': 'Buzzards Bay, MA',
+            '02553': 'Monument Beach, MA', '02559': 'Pocasset, MA', '02561': 'Sagamore, MA',
+            '02571': 'Wareham, MA', '02702': 'Assonet, MA', '02703': 'Attleboro, MA',
+            '02717': 'East Freetown, MA', '02719': 'Fairhaven, MA', '02720': 'Fall River, MA',
+            '02721': 'Fall River, MA', '02722': 'Fall River, MA', '02723': 'Fall River, MA',
+            '02724': 'Fall River, MA', '02725': 'Somerset, MA', '02726': 'Somerset, MA',
+            '02739': 'Acushnet, MA', '02740': 'New Bedford, MA', '02743': 'Acushnet, MA',
+            '02744': 'New Bedford, MA', '02745': 'New Bedford, MA', '02746': 'New Bedford, MA',
+            '02747': 'North Dartmouth, MA', '02748': 'South Dartmouth, MA', '02762': 'Plainville, MA',
+            '02766': 'Norton, MA', '02769': 'Rehoboth, MA', '02770': 'Rochester, MA',
+            '02771': 'Seekonk, MA', '02777': 'Swansea, MA'
+        };
+
+        // Get unique towns
+        const allTowns = [...new Set(Object.values(zipData).map(loc => loc.split(',')[0].trim()))].sort();
+        document.getElementById('zipCount').textContent = allTowns.length;
+
+        // Autocomplete
+        const townInput = document.getElementById('townName');
+        const dropdown = document.getElementById('autocompleteDropdown');
+
+        townInput.addEventListener('input', function() {
+            const value = this.value.toLowerCase().trim();
+            dropdown.innerHTML = '';
+
+            if (value.length === 0) {
+                dropdown.classList.remove('active');
+                return;
+            }
+
+            const matches = allTowns.filter(town => 
+                town.toLowerCase().includes(value)
+            ).slice(0, 8);
+
+            if (matches.length > 0) {
+                matches.forEach(town => {
+                    const item = document.createElement('div');
+                    item.className = 'autocomplete-item';
+                    item.textContent = town;
+                    item.addEventListener('click', function() {
+                        townInput.value = town;
+                        dropdown.classList.remove('active');
+                    });
+                    dropdown.appendChild(item);
+                });
+                dropdown.classList.add('active');
+            } else {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!townInput.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        function checkNetwork() {
+            const townInput = document.getElementById('townName');
+            const resultDiv = document.getElementById('networkResult');
+            const loadingBar = document.getElementById('loadingBar');
+            const loadingProgress = document.getElementById('loadingProgress');
+            const button = document.querySelector('.submit-btn');
+            const townName = townInput.value.trim();
+
+            if (!townName) {
+                showResult('Please enter a town name', 'error');
+                return;
+            }
+
+            resultDiv.style.display = 'none';
+            loadingBar.classList.add('active');
+            loadingProgress.style.width = '0%';
+            button.disabled = true;
+
+            setTimeout(() => {
+                loadingProgress.style.width = '100%';
+            }, 10);
+
+            setTimeout(() => {
+                const normalizedInput = townName.toLowerCase().replace(/\s+/g, ' ').trim();
+                
+                const isInNetwork = allTowns.some(town => {
+                    const normalizedTown = town.toLowerCase();
+                    return normalizedTown === normalizedInput || 
+                           normalizedTown.includes(normalizedInput) || 
+                           normalizedInput.includes(normalizedTown);
+                });
+
+                loadingBar.classList.remove('active');
+                button.disabled = false;
+
+                if (isInNetwork) {
+                    showResult('In Network', 'in-network');
+                } else {
+                    showResult('Not in Network', 'out-network');
+                }
+            }, 800);
+        }
+
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('networkResult');
+            resultDiv.innerHTML = message;
+            resultDiv.className = `result ${type}`;
+            resultDiv.style.display = 'block';
+        }
+
+        townInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkNetwork();
+            }
+        });
+    </script>
+</body>
+</html>
