@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Tiers Directory | Daylight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --daylight-orange: #FF6B35;
+            --daylight-orange-dark: #E55A2B;
+            --daylight-cream: #FFF8F0;
+            --daylight-cream-dark: #F5EDE3;
+            --daylight-black: #1A1A1A;
+            --daylight-gray: #6B6B6B;
+            --daylight-light-gray: #E8E8E8;
+            --tier1: #FF6B35;
+            --tier2: #F59E0B;
+            --tier3: #10B981;
+            --tier4: #6B7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--daylight-cream);
+            min-height: 100vh;
+            color: var(--daylight-black);
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--daylight-gray);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 32px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--daylight-orange);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+        }
+
+        .logo span {
+            color: var(--daylight-orange);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--daylight-gray);
+        }
+
+        .stats-bar {
+            background: var(--daylight-cream-dark);
+            border-radius: 12px;
+            padding: 20px 32px;
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-bottom: 24px;
+            border: 2px solid var(--daylight-light-gray);
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--daylight-black);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--daylight-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: var(--daylight-cream-dark);
+            border: 2px solid var(--daylight-light-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .tab:hover {
+            border-color: var(--daylight-orange);
+        }
+
+        .tab.active {
+            background: var(--daylight-orange);
+            border-color: var(--daylight-orange);
+            color: white;
+        }
+
+        .tier-section {
+            margin-bottom: 32px;
+        }
+
+        .tier-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .tier-badge {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .tier-badge.tier1 { background: var(--tier1); }
+        .tier-badge.tier2 { background: var(--tier2); }
+        .tier-badge.tier3 { background: var(--tier3); }
+        .tier-badge.tier4 { background: var(--tier4); }
+
+        .tier-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--daylight-black);
+        }
+
+        .tier-count {
+            font-size: 14px;
+            color: var(--daylight-gray);
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .partner-card {
+            background: var(--daylight-cream-dark);
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid var(--daylight-light-gray);
+            transition: all 0.2s ease;
+        }
+
+        .partner-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--daylight-orange);
+            box-shadow: 0 8px 24px rgba(255, 107, 53, 0.1);
+        }
+
+        .partner-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 4px;
+        }
+
+        .partner-company {
+            font-size: 14px;
+            color: var(--daylight-gray);
+            margin-bottom: 12px;
+        }
+
+        .partner-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .detail-tag {
+            padding: 4px 10px;
+            background: var(--daylight-cream);
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--daylight-gray);
+        }
+
+        .detail-tag strong {
+            color: var(--daylight-black);
+        }
+
+        .partner-contact {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--daylight-light-gray);
+            font-size: 13px;
+        }
+
+        .partner-contact a {
+            color: var(--daylight-orange);
+            text-decoration: none;
+        }
+
+        .partner-contact a:hover {
+            text-decoration: underline;
+        }
+
+        .empty-tier {
+            padding: 32px;
+            text-align: center;
+            color: var(--daylight-gray);
+            background: var(--daylight-cream-dark);
+            border-radius: 12px;
+            border: 2px dashed var(--daylight-light-gray);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 48px 24px 24px;
+            color: var(--daylight-gray);
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: var(--daylight-orange);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back to Tools
+        </a>
+
+        <div class="header">
+            <div class="logo">daylight<span>.</span></div>
+            <h1>Partner Tiers Directory</h1>
+            <p class="subtitle">Partners organized by tier and business type</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="totalPartners">0</div>
+                <div class="stat-label">Total Partners</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="tier1Count">0</div>
+                <div class="stat-label">Tier 1</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="tier2Count">0</div>
+                <div class="stat-label">Tier 2</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="tier3Count">0</div>
+                <div class="stat-label">Tier 3</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="tier4Count">0</div>
+                <div class="stat-label">Tier 4</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('all')">All Partners</button>
+            <button class="tab" onclick="switchTab('epc')">EPC</button>
+            <button class="tab" onclick="switchTab('epc-sales')">EPC with Inside Sales</button>
+            <button class="tab" onclick="switchTab('sales-org')">Sales Org</button>
+        </div>
+
+        <div id="partnersContent">
+            <!-- Content populated by JavaScript -->
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Built for <a href="https://godaylight.com" target="_blank">Daylight</a> partner operations</p>
+    </div>
+
+    <script>
+        // Empty partner data - add your partners here
+        // Format: { name, company, email, phone, projects, size, crews, crewType, type }
+        // type options: "EPC", "EPC with Inside Sales", "Sales Org"
+        // Tier is auto-calculated based on projects: 50+ = Tier 1, 25-49 = Tier 2, 10-24 = Tier 3, <10 = Tier 4
+        const partners = [
+            // Example entry (uncomment and modify to add partners):
+            // { name: "John Smith", company: "Solar Co", email: "john@solar.com", phone: "(555) 123-4567", projects: 45, size: "51-200", crews: 5, crewType: "W2", type: "EPC" },
+        ];
+
+        function getTier(projects) {
+            if (projects >= 50) return 1;
+            if (projects >= 25) return 2;
+            if (projects >= 10) return 3;
+            return 4;
+        }
+
+        function getTierName(tier) {
+            const names = {
+                1: "National Player (50+ projects/mo)",
+                2: "Regional Player (25-49 projects/mo)",
+                3: "Local Player (10-24 projects/mo)",
+                4: "Small EPC (<10 projects/mo)"
+            };
+            return names[tier];
+        }
+
+        function filterPartners(type) {
+            if (type === 'all') return partners;
+            const typeMap = {
+                'epc': 'EPC',
+                'epc-sales': 'EPC with Inside Sales',
+                'sales-org': 'Sales Org'
+            };
+            return partners.filter(p => p.type === typeMap[type]);
+        }
+
+        function renderPartners(filteredPartners) {
+            const container = document.getElementById('partnersContent');
+            
+            const tiers = [1, 2, 3, 4];
+            let html = '';
+            
+            tiers.forEach(tier => {
+                const tierPartners = filteredPartners.filter(p => getTier(p.projects) === tier);
+                
+                html += `
+                    <div class="tier-section">
+                        <div class="tier-header">
+                            <span class="tier-badge tier${tier}">Tier ${tier}</span>
+                            <span class="tier-title">${getTierName(tier)}</span>
+                            <span class="tier-count">(${tierPartners.length} partners)</span>
+                        </div>
+                        ${tierPartners.length > 0 ? `
+                            <div class="partners-grid">
+                                ${tierPartners.map(p => `
+                                    <div class="partner-card">
+                                        <div class="partner-name">${p.name}</div>
+                                        <div class="partner-company">${p.company}</div>
+                                        <div class="partner-details">
+                                            <span class="detail-tag"><strong>${p.projects}</strong> projects/mo</span>
+                                            <span class="detail-tag">${p.size} employees</span>
+                                            <span class="detail-tag">${p.crews} crews</span>
+                                            <span class="detail-tag">${p.type}</span>
+                                        </div>
+                                        <div class="partner-contact">
+                                            <a href="mailto:${p.email}">${p.email}</a><br>
+                                            ${p.phone}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `
+                            <div class="empty-tier">No partners in this tier yet</div>
+                        `}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function switchTab(type) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const filtered = filterPartners(type);
+            renderPartners(filtered);
+            
+            // Update stats
+            const tier1 = filtered.filter(p => getTier(p.projects) === 1).length;
+            const tier2 = filtered.filter(p => getTier(p.projects) === 2).length;
+            const tier3 = filtered.filter(p => getTier(p.projects) === 3).length;
+            const tier4 = filtered.filter(p => getTier(p.projects) === 4).length;
+            
+            document.getElementById('totalPartners').textContent = filtered.length;
+            document.getElementById('tier1Count').textContent = tier1;
+            document.getElementById('tier2Count').textContent = tier2;
+            document.getElementById('tier3Count').textContent = tier3;
+            document.getElementById('tier4Count').textContent = tier4;
+        }
+
+        // Initial render
+        renderPartners(partners);
+    </script>
+</body>
+</html>
