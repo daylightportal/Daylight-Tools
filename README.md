@@ -7,8 +7,6 @@ Internal tools for Daylight solar partner operations.
 | Tool | Description |
 |------|-------------|
 | **Escalator Calculator** | 25-year payment projections with annual escalation rates |
-| **Partner Intake Form** | Collect new partner information with local database |
-| **Partner Tiers Directory** | View partners organized by tier and business type |
 | **Network Qualifier** | Check if MA towns are in the Sunday Energy service area |
 | **SVG to PNG Converter** | Batch convert SVG files with custom colors/dimensions |
 | **MA Grid Reliability** | Live outage data from MEMA + solar sales content |
