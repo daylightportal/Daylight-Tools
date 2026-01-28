@@ -37,23 +37,6 @@ The Grid Reliability dashboard pulls real data from MEMA (Massachusetts Emergenc
 --daylight-black: #232220;
 ```
 
-### Adding Partners to Tiers Directory
-Edit `tools/partner-tiers.html` and add entries to the `partners` array:
-```javascript
-const partners = [
-  { 
-    name: "John Smith", 
-    company: "Solar Co", 
-    email: "john@solar.com", 
-    phone: "(555) 123-4567", 
-    projects: 45,      // Determines tier automatically
-    size: "51-200", 
-    crews: 5, 
-    type: "EPC"        // "EPC", "EPC with Inside Sales", or "Sales Org"
-  },
-];
-```
-
 ## License
 
 Internal use only - Daylight Energy
