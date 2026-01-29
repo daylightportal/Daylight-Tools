@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daylight Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --daylight-orange: #F66F00;
+            --daylight-orange-dark: #f47e1f;
+            --daylight-cream: #FFF7E9;
+            --daylight-cream-dark: #FFF7E9;
+            --daylight-black: #111111;
+            --daylight-gray: #232220;
+            --daylight-light-gray: #F3EAD9;
+            --success-green: #10B981;
+            --success-green-light: #D1FAE5;
+            --danger-red: #EF4444;
+            --danger-red-light: #FEE2E2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--daylight-cream);
+            min-height: 100vh;
+            color: var(--daylight-black);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--daylight-gray);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 32px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--daylight-orange);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--daylight-orange);
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--daylight-gray);
+            font-weight: 400;
+        }
+
+        .calculator-card {
+            background: var(--daylight-cream-dark);
+            border-radius: 16px;
+            padding: 40px;
+            border: 2px solid var(--daylight-light-gray);
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--daylight-black);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--daylight-orange);
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .input-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 900px) {
+            .input-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .input-grid, .input-grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--daylight-black);
+            margin-bottom: 8px;
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: var(--daylight-gray);
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 2px solid var(--daylight-light-gray);
+            border-radius: 10px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: var(--daylight-cream);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--daylight-orange);
+            background: white;
+        }
+
+        .input-field::placeholder {
+            color: #A0A0A0;
+        }
+
+        .currency-input {
+            position: relative;
+        }
+
+        .currency-input::before {
+            content: '$';
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--daylight-gray);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .currency-input .input-field {
+            padding-left: 32px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: var(--daylight-orange);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .submit-btn:hover {
+            background: var(--daylight-orange-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(246, 111, 0, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Results */
+        .results-section {
+            display: none;
+        }
+
+        .results-section.visible {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .results-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--daylight-black);
+        }
+
+        /* Comparison Cards */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 700px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-card {
+            padding: 28px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .comparison-card.daylight {
+            background: white;
+            border: 3px solid var(--daylight-orange);
+        }
+
+        .comparison-card.utility {
+            background: var(--danger-red-light);
+            border: 3px solid var(--danger-red);
+        }
+
+        .comparison-card-header {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .comparison-card.daylight .comparison-card-header {
+            color: var(--daylight-orange);
+        }
+
+        .comparison-card.utility .comparison-card-header {
+            color: var(--danger-red);
+        }
+
+        .comparison-card-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .comparison-card.daylight .comparison-card-value {
+            color: var(--daylight-black);
+        }
+
+        .comparison-card.utility .comparison-card-value {
+            color: var(--danger-red);
+        }
+
+        .comparison-card-label {
+            font-size: 13px;
+            color: var(--daylight-gray);
+            margin-bottom: 16px;
+        }
+
+        .comparison-card-detail {
+            font-size: 12px;
+            color: var(--daylight-gray);
+            padding-top: 16px;
+            border-top: 1px solid var(--daylight-light-gray);
+        }
+
+        .comparison-card.utility .comparison-card-detail {
+            border-top-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .escalator-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .escalator-badge.orange {
+            background: rgba(246, 111, 0, 0.1);
+            color: var(--daylight-orange);
+        }
+
+        .escalator-badge.red {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-red);
+        }
+
+        /* Savings Highlight */
+        .savings-highlight {
+            background: var(--success-green-light);
+            border: 3px solid var(--success-green);
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .savings-highlight-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--success-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .savings-highlight-value {
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--success-green);
+            margin-bottom: 8px;
+        }
+
+        .savings-highlight-detail {
+            font-size: 16px;
+            color: var(--daylight-gray);
+        }
+
+        .savings-highlight-detail strong {
+            color: var(--success-green);
+        }
+
+        /* Breakdown Table */
+        .breakdown-section {
+            margin-top: 32px;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--daylight-light-gray);
+        }
+
+        .breakdown-row:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-row.total {
+            border-top: 2px solid var(--daylight-orange);
+            margin-top: 8px;
+            padding-top: 16px;
+        }
+
+        .breakdown-label {
+            color: var(--daylight-gray);
+            font-size: 14px;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            color: var(--daylight-black);
+            font-size: 14px;
+        }
+
+        .breakdown-value.highlight {
+            color: var(--daylight-orange);
+            font-size: 16px;
+        }
+
+        .breakdown-value.green {
+            color: var(--success-green);
+        }
+
+        .breakdown-value.red {
+            color: var(--danger-red);
+        }
+
+        /* Year by Year Table */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--daylight-light-gray);
+            margin-top: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead {
+            background: var(--daylight-black);
+            color: white;
+        }
+
+        th {
+            padding: 14px 12px;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        th:first-child {
+            border-radius: 11px 0 0 0;
+        }
+
+        th:last-child {
+            border-radius: 0 11px 0 0;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--daylight-light-gray);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:nth-child(even) {
+            background: rgba(243, 234, 217, 0.5);
+        }
+
+        tbody tr:hover {
+            background: rgba(246, 111, 0, 0.08);
+        }
+
+        .highlight-row {
+            background: rgba(246, 111, 0, 0.12) !important;
+        }
+
+        .highlight-row td {
+            font-weight: 600;
+        }
+
+        .currency {
+            font-family: 'Inter', monospace;
+        }
+
+        .savings-cell {
+            color: var(--success-green);
+            font-weight: 600;
+        }
+
+        .export-btn {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--daylight-orange);
+            background: white;
+            border: 2px solid var(--daylight-orange);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .export-btn:hover {
+            background: var(--daylight-orange);
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--daylight-gray);
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: var(--daylight-orange);
+            text-decoration: none;
+        }
+
+        .toggle-table {
+            background: none;
+            border: none;
+            color: var(--daylight-orange);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+            font-family: inherit;
+        }
+
+        .toggle-table:hover {
+            text-decoration: underline;
+        }
+
+        .year-table-section {
+            display: none;
+        }
+
+        .year-table-section.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back to Tools
+        </a>
+
+        <div class="header">
+            <div class="logo">daylight<span>.</span></div>
+            <p class="subtitle">Solar Savings Calculator</p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="calculator-card">
+            <h3 class="section-title">Customer Information</h3>
+            
+            <div class="input-grid">
+                <div class="input-group">
+                    <label class="input-label">Annual kWh Usage</label>
+                    <p class="input-hint">Total yearly consumption from utility bill</p>
+                    <input type="number" id="annualUsage" class="input-field" placeholder="12000" min="0" value="12000">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Current Utility Rate</label>
+                    <p class="input-hint">Customer's current $/kWh</p>
+                    <div class="currency-input">
+                        <input type="number" id="utilityRate" class="input-field" placeholder="0.32" step="0.01" min="0" value="0.32">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Daylight Rate</label>
+                    <p class="input-hint">Locked Daylight $/kWh rate</p>
+                    <div class="currency-input">
+                        <input type="number" id="daylightRate" class="input-field" placeholder="0.21" step="0.01" min="0" value="0.21">
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-grid-2">
+                <div class="input-group">
+                    <label class="input-label">Solar Offset %</label>
+                    <p class="input-hint">Percentage of usage covered by solar</p>
+                    <input type="number" id="solarOffset" class="input-field" placeholder="90" min="0" max="100" value="90">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Daylight Escalator Rate</label>
+                    <p class="input-hint">Annual increase on Daylight rate</p>
+                    <select id="daylightEscalator" class="input-field">
+                        <option value="0">0% - No Escalation (Locked Rate)</option>
+                        <option value="0.99">0.99% Annual Increase</option>
+                        <option value="1.99">1.99% Annual Increase</option>
+                        <option value="3.49">3.49% Annual Increase</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-grid-2">
+                <div class="input-group">
+                    <label class="input-label">Utility Escalator Rate</label>
+                    <p class="input-hint">Expected annual utility rate increase</p>
+                    <select id="utilityEscalator" class="input-field">
+                        <option value="2">2% (Conservative)</option>
+                        <option value="3" selected>3% (Historical Average)</option>
+                        <option value="4">4% (Moderate)</option>
+                        <option value="5">5% (High Growth)</option>
+                    </select>
+                </div>
+
+                <div class="input-group" style="justify-content: flex-end;">
+                    <button class="submit-btn" onclick="calculate()">Calculate 25-Year Savings</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            
+            <!-- Year 1 Summary -->
+            <div class="calculator-card">
+                <h3 class="section-title">Year 1 Summary</h3>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card daylight">
+                        <div class="comparison-card-header">With Daylight</div>
+                        <div class="comparison-card-value" id="year1Daylight">$2,652</div>
+                        <div class="comparison-card-label">Annual Cost</div>
+                        <div class="comparison-card-detail">
+                            <span id="year1DaylightMonthly">$221</span>/month
+                            <span class="escalator-badge orange" id="daylightEscalatorBadge">0% escalator</span>
+                        </div>
+                    </div>
+                    <div class="comparison-card utility">
+                        <div class="comparison-card-header">Without Solar</div>
+                        <div class="comparison-card-value" id="year1Utility">$3,840</div>
+                        <div class="comparison-card-label">Annual Cost</div>
+                        <div class="comparison-card-detail">
+                            <span id="year1UtilityMonthly">$320</span>/month
+                            <span class="escalator-badge red" id="utilityEscalatorBadge">3% escalator</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="breakdown-section">
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">Annual kWh Usage</span>
+                        <span class="breakdown-value" id="resultUsage">12,000 kWh</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">Solar Production</span>
+                        <span class="breakdown-value" id="resultSolar">10,800 kWh</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">Remaining from Grid</span>
+                        <span class="breakdown-value" id="resultGrid">1,200 kWh</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">Daylight Solar Cost (Year 1)</span>
+                        <span class="breakdown-value" id="resultDaylightCost">$2,268</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">Remaining Utility Cost (Year 1)</span>
+                        <span class="breakdown-value" id="resultUtilityCost">$384</span>
+                    </div>
+                    <div class="breakdown-row total">
+                        <span class="breakdown-label"><strong>Year 1 Savings</strong></span>
+                        <span class="breakdown-value green" id="resultYear1Savings">$1,188</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 25 Year Savings -->
+            <div class="savings-highlight">
+                <div class="savings-highlight-label">Total 25-Year Savings</div>
+                <div class="savings-highlight-value" id="total25YearSavings">$52,340</div>
+                <div class="savings-highlight-detail">
+                    Daylight: <strong id="total25YearDaylight">$78,420</strong> vs Utility: <span style="color: var(--danger-red);" id="total25YearUtility">$130,760</span>
+                </div>
+            </div>
+
+            <!-- Year by Year Toggle -->
+            <div class="calculator-card">
+                <div class="results-header">
+                    <h3 class="results-title">25-Year Cost Comparison</h3>
+                    <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+                </div>
+
+                <button class="toggle-table" onclick="toggleTable()">
+                    <svg id="toggleIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                    <span id="toggleText">Show Year-by-Year Breakdown</span>
+                </button>
+
+                <div class="year-table-section" id="yearTableSection">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Daylight Rate</th>
+                                    <th>Utility Rate</th>
+                                    <th>Daylight Annual</th>
+                                    <th>Utility Annual</th>
+                                    <th>Annual Savings</th>
+                                    <th>Cumulative Savings</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Built for <a href="https://godaylight.com" target="_blank">Daylight</a> partner operations</p>
+        </div>
+    </div>
+
+    <script>
+        // Formatting helpers
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function formatCurrencyDecimal(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('en-US').format(num);
+        }
+
+        let calculationData = null;
+
+        function calculate() {
+            const annualUsage = parseFloat(document.getElementById('annualUsage').value) || 0;
+            const utilityRate = parseFloat(document.getElementById('utilityRate').value) || 0;
+            const daylightRate = parseFloat(document.getElementById('daylightRate').value) || 0;
+            const solarOffset = parseFloat(document.getElementById('solarOffset').value) || 0;
+            const daylightEscalator = parseFloat(document.getElementById('daylightEscalator').value) / 100;
+            const utilityEscalator = parseFloat(document.getElementById('utilityEscalator').value) / 100;
+
+            if (!annualUsage || !utilityRate || !daylightRate || !solarOffset) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            // Energy calculations
+            const solarProduction = annualUsage * (solarOffset / 100);
+            const gridUsage = annualUsage - solarProduction;
+
+            // Build year-by-year data
+            const yearData = [];
+            let cumulativeSavings = 0;
+            let totalDaylight = 0;
+            let totalUtility = 0;
+
+            let currentDaylightRate = daylightRate;
+            let currentUtilityRate = utilityRate;
+
+            for (let year = 1; year <= 25; year++) {
+                if (year > 1) {
+                    currentDaylightRate = currentDaylightRate * (1 + daylightEscalator);
+                    currentUtilityRate = currentUtilityRate * (1 + utilityEscalator);
+                }
+
+                const daylightAnnual = (solarProduction * currentDaylightRate) + (gridUsage * currentUtilityRate);
+                const utilityAnnual = annualUsage * currentUtilityRate;
+                const annualSavings = utilityAnnual - daylightAnnual;
+                cumulativeSavings += annualSavings;
+                totalDaylight += daylightAnnual;
+                totalUtility += utilityAnnual;
+
+                yearData.push({
+                    year,
+                    daylightRate: currentDaylightRate,
+                    utilityRate: currentUtilityRate,
+                    daylightAnnual,
+                    utilityAnnual,
+                    annualSavings,
+                    cumulativeSavings
+                });
+            }
+
+            // Store for export
+            calculationData = {
+                inputs: { annualUsage, utilityRate, daylightRate, solarOffset, daylightEscalator, utilityEscalator, solarProduction, gridUsage },
+                yearData,
+                totalDaylight,
+                totalUtility,
+                totalSavings: cumulativeSavings
+            };
+
+            // Update Year 1 display
+            const year1 = yearData[0];
+            document.getElementById('year1Daylight').textContent = formatCurrency(year1.daylightAnnual);
+            document.getElementById('year1DaylightMonthly').textContent = formatCurrency(year1.daylightAnnual / 12);
+            document.getElementById('year1Utility').textContent = formatCurrency(year1.utilityAnnual);
+            document.getElementById('year1UtilityMonthly').textContent = formatCurrency(year1.utilityAnnual / 12);
+
+            document.getElementById('daylightEscalatorBadge').textContent = daylightEscalator === 0 ? 'Locked Rate' : (daylightEscalator * 100).toFixed(2) + '% escalator';
+            document.getElementById('utilityEscalatorBadge').textContent = (utilityEscalator * 100) + '% escalator';
+
+            // Update breakdown
+            document.getElementById('resultUsage').textContent = formatNumber(annualUsage) + ' kWh';
+            document.getElementById('resultSolar').textContent = formatNumber(Math.round(solarProduction)) + ' kWh';
+            document.getElementById('resultGrid').textContent = formatNumber(Math.round(gridUsage)) + ' kWh';
+            document.getElementById('resultDaylightCost').textContent = formatCurrency(solarProduction * daylightRate);
+            document.getElementById('resultUtilityCost').textContent = formatCurrency(gridUsage * utilityRate);
+            document.getElementById('resultYear1Savings').textContent = formatCurrency(year1.annualSavings);
+
+            // Update 25-year totals
+            document.getElementById('total25YearSavings').textContent = formatCurrency(cumulativeSavings);
+            document.getElementById('total25YearDaylight').textContent = formatCurrency(totalDaylight);
+            document.getElementById('total25YearUtility').textContent = formatCurrency(totalUtility);
+
+            // Build table
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            yearData.forEach(data => {
+                const row = document.createElement('tr');
+                if (data.year % 5 === 0) {
+                    row.classList.add('highlight-row');
+                }
+
+                row.innerHTML = `
+                    <td>Year ${data.year}</td>
+                    <td class="currency">${formatCurrencyDecimal(data.daylightRate)}/kWh</td>
+                    <td class="currency">${formatCurrencyDecimal(data.utilityRate)}/kWh</td>
+                    <td class="currency">${formatCurrency(data.daylightAnnual)}</td>
+                    <td class="currency">${formatCurrency(data.utilityAnnual)}</td>
+                    <td class="savings-cell">${formatCurrency(data.annualSavings)}</td>
+                    <td class="savings-cell">${formatCurrency(data.cumulativeSavings)}</td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+
+            // Show results
+            document.getElementById('resultsSection').classList.add('visible');
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function toggleTable() {
+            const section = document.getElementById('yearTableSection');
+            const icon = document.getElementById('toggleIcon');
+            const text = document.getElementById('toggleText');
+            
+            if (section.classList.contains('visible')) {
+                section.classList.remove('visible');
+                icon.style.transform = 'rotate(0deg)';
+                text.textContent = 'Show Year-by-Year Breakdown';
+            } else {
+                section.classList.add('visible');
+                icon.style.transform = 'rotate(180deg)';
+                text.textContent = 'Hide Year-by-Year Breakdown';
+            }
+        }
+
+        function exportToCSV() {
+            if (!calculationData) return;
+
+            const { inputs, yearData, totalDaylight, totalUtility, totalSavings } = calculationData;
+
+            let csv = 'Daylight Solar Calculator Export\n';
+            csv += `Date,${new Date().toLocaleDateString()}\n\n`;
+            csv += 'INPUTS\n';
+            csv += `Annual Usage,${inputs.annualUsage} kWh\n`;
+            csv += `Current Utility Rate,$${inputs.utilityRate}/kWh\n`;
+            csv += `Daylight Rate,$${inputs.daylightRate}/kWh\n`;
+            csv += `Solar Offset,${inputs.solarOffset}%\n`;
+            csv += `Daylight Escalator,${(inputs.daylightEscalator * 100).toFixed(2)}%\n`;
+            csv += `Utility Escalator,${(inputs.utilityEscalator * 100)}%\n\n`;
+            csv += 'ENERGY BREAKDOWN\n';
+            csv += `Solar Production,${Math.round(inputs.solarProduction)} kWh\n`;
+            csv += `Grid Usage,${Math.round(inputs.gridUsage)} kWh\n\n`;
+            csv += '25-YEAR TOTALS\n';
+            csv += `Total Daylight Cost,$${totalDaylight.toFixed(2)}\n`;
+            csv += `Total Utility Cost,$${totalUtility.toFixed(2)}\n`;
+            csv += `Total Savings,$${totalSavings.toFixed(2)}\n\n`;
+            csv += 'YEAR-BY-YEAR BREAKDOWN\n';
+            csv += 'Year,Daylight Rate,Utility Rate,Daylight Annual,Utility Annual,Annual Savings,Cumulative Savings\n';
+
+            yearData.forEach(data => {
+                csv += `${data.year},$${data.daylightRate.toFixed(4)},$${data.utilityRate.toFixed(4)},$${data.daylightAnnual.toFixed(2)},$${data.utilityAnnual.toFixed(2)},$${data.annualSavings.toFixed(2)},$${data.cumulativeSavings.toFixed(2)}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `daylight-calculator-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Enter key handler
+        document.querySelectorAll('.input-field').forEach(field => {
+            field.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') calculate();
+            });
+        });
+    </script>
+</body>
+</html>
